@@ -1,0 +1,17 @@
+{
+  "title": "Status Panel",
+  "description": "A simple, elegant, and beautiful status panel.",
+  "allSystemsOperational": "All Systems Operational",
+  "someSystemsDown": "Some Systems Down",
+  "allSystemsDown": "All Systems Down",
+  "status": {
+    "up": "Up",
+    "down": "Down",
+    "paused": "Paused",
+    "seemsDown": "Seems Down"
+  },
+  "daily": "Daily",
+  "history": "History",
+  "noData": "No data available",
+  "poweredBy": "Powered by UptimeRobot & Nuxt"
+}

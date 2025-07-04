@@ -1,0 +1,17 @@
+{
+  "title": "站点监控",
+  "description": "一个简洁、优雅、漂亮的站点监控面板",
+  "allSystemsOperational": "所有系统运行正常",
+  "someSystemsDown": "部分系统出现故障",
+  "allSystemsDown": "所有系统宕机",
+  "status": {
+    "up": "正常",
+    "down": "宕机",
+    "paused": "暂停",
+    "seemsDown": "疑似故障"
+  },
+  "daily": "24小时",
+  "history": "历史",
+  "noData": "暂无数据",
+  "poweredBy": "由 UptimeRobot & Nuxt 驱动"
+}
