@@ -24,8 +24,13 @@ const props = defineProps<{
   monitor: Monitor
 }>();
 
-const uptimeRatios = computed(() => props.monitor.custom_uptime_ratios.split('-').map(Number));
+const uptimeRatios = computed(() => {
+  // 使用可选链和默认值来防止错误
+  const ratioString = props.monitor?.custom_uptime_ratios || '';
+  return ratioString.split('-').map(Number);
+});
 
+// 其他 computed 属性因为依赖于 uptimeRatios，所以也间接受到了保护
 const uptime90Days = computed(() => uptimeRatios.value[3] || 0);
 
 const uptimeColor = computed(() => {

@@ -48,10 +48,13 @@ import StatusCard from '~/components/StatusCard.vue';
 const { t, locale } = useI18n();
 
 const { data: monitors, pending, error } = await useFetch<Monitor[]>('/api/status', {
-  lazy: true // Use lazy fetch for better UX
+  lazy: true,
+  // 提供一个默认值，这是最佳实践
+  default: () => []
 });
 
 const overallStatus = computed(() => {
+  // 防御性检查
   if (!monitors.value || monitors.value.length === 0) {
     return 'operational';
   }
@@ -65,6 +68,23 @@ const overallStatus = computed(() => {
   return 'partial';
 });
 
+const overallUptime = computed(() => {
+  // 防御性检查
+  if (!monitors.value || monitors.value.length === 0) {
+    return 100;
+  }
+  
+  const totalUptime = monitors.value.reduce((acc, monitor) => {
+    // 确保 monitor 和 custom_uptime_ratios 都存在
+    const ratioString = monitor?.custom_uptime_ratios || '';
+    const ratios = ratioString.split('-').map(Number);
+    // 增加对 ratios[3] 的检查
+    return acc + (ratios[3] || 0); // 90-day uptime
+  }, 0);
+
+  return totalUptime / monitors.value.length;
+});
+
 const overallStatusText = computed(() => {
   switch (overallStatus.value) {
     case 'operational': return t('allSystemsOperational');
@@ -73,17 +93,6 @@ const overallStatusText = computed(() => {
     case 'major': return t('majorOutage');
     default: return t('loading');
   }
-});
-
-const overallUptime = computed(() => {
-  if (!monitors.value || monitors.value.length === 0) return 100;
-
-  const totalUptime = monitors.value.reduce((acc, monitor) => {
-    const ratios = monitor.custom_uptime_ratios.split('-').map(Number);
-    return acc + (ratios[3] || 0); // 90-day uptime
-  }, 0);
-
-  return totalUptime / monitors.value.length;
 });
 
 const overallUptimeColor = computed(() => {
