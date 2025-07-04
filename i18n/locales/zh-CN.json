@@ -13,5 +13,7 @@
   "daily": "24小时",
   "history": "历史",
   "noData": "暂无数据",
-  "poweredBy": "由 UptimeRobot & Nuxt 驱动"
+  "poweredBy": "由 UptimeRobot & Nuxt 驱动",
+  "days": "天",
+  "today": "今日"
 }

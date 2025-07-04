@@ -3,7 +3,7 @@
     <div class="container mx-auto px-4 py-8 md:py-12 max-w-4xl">
       
       <SiteHeader />
-
+      
       <div v-if="pending" class="text-center py-10 text-light-text-sub dark:text-dark-text-sub">
         Loading Monitors...
       </div>
@@ -12,8 +12,12 @@
         <p>{{ error.statusMessage || 'An unknown error occurred.' }}</p>
       </div>
 
-      <main v-if="!pending && data" class="space-y-3">
-        <MonitorCard v-for="monitor in data.monitors" :key="monitor.id" :monitor="monitor" />
+      <main v-if="data?.monitors">
+        <StatusBanner :monitors="data.monitors" />
+        
+        <div class="space-y-4">
+          <MonitorCard v-for="monitor in data.monitors" :key="monitor.id" :monitor="monitor" />
+        </div>
       </main>
 
        <footer class="text-center mt-12 text-sm text-light-text-sub dark:text-dark-text-sub">
@@ -29,11 +33,11 @@
 
 <script setup>
 import SiteHeader from '~/components/SiteHeader.vue'
+import StatusBanner from '~/components/StatusBanner.vue'
 import MonitorCard from '~/components/MonitorCard.vue'
 
 const { t, locale } = useI18n()
 
-// 更新页面标题和html lang属性
 useHead(() => ({
   title: t('title'),
   htmlAttrs: {
@@ -41,23 +45,18 @@ useHead(() => ({
   }
 }))
 
-// 获取监控数据
-const { data, pending, error, refresh } = await useFetch('/api/monitors', {
-  lazy: true,
-  server: true,
-})
+const { data, pending, error, refresh } = await useAsyncData(
+  'monitors-data',
+  () => $fetch('/api/monitors'),
+  { server: true }
+)
 
-// 每分钟自动刷新数据
 onMounted(() => {
   const interval = setInterval(() => {
     refresh()
-  }, 60000)
+  }, 60000) // Refresh every 60 seconds
   onBeforeUnmount(() => {
     clearInterval(interval)
   })
 })
 </script>
-
-<style>
-/* 你可以保留这个 style 块，以备将来添加全局样式 */
-</style>

@@ -10,8 +10,10 @@
     "paused": "Paused",
     "seemsDown": "Seems Down"
   },
-  "daily": "Daily",
+  "daily": "24h",
   "history": "History",
   "noData": "No data available",
-  "poweredBy": "Powered by UptimeRobot & Nuxt"
+  "poweredBy": "Powered by UptimeRobot & Nuxt",
+  "days": "days",
+  "today": "Today"
 }

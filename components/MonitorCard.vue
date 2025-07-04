@@ -1,36 +1,35 @@
 <template>
-  <div class="p-4 md:p-5 bg-light-card dark:bg-dark-card rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center border border-transparent dark:border-dark-border">
-    <div class="flex-grow w-full md:w-auto">
-      <div class="flex items-center">
-        <span class="mr-3 text-lg" :class="statusInfo.colorClass">
-          <font-awesome-icon :icon="statusInfo.icon" />
-        </span>
+  <div class="p-4 md:p-5 bg-light-card dark:bg-dark-card rounded-lg border border-light-border/50 dark:border-dark-border/50">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+      <div class="flex-grow">
         <p class="text-lg font-semibold">{{ monitor.friendly_name }}</p>
+        <p class="text-sm text-light-text-sub dark:text-dark-text-sub">HTTP / 5m</p>
       </div>
-      <a :href="monitor.url" target="_blank" rel="noopener noreferrer" class="text-sm text-light-text-sub dark:text-dark-text-sub hover:underline break-all ml-8">{{ monitor.url }}</a>
+      <div class="flex items-center mt-2 md:mt-0" :class="statusInfo.colorClass">
+        <font-awesome-icon :icon="statusInfo.icon" class="mr-2" />
+        <span class="font-semibold">{{ statusInfo.text }}</span>
+      </div>
     </div>
+    
+    <HistoryGrid :ratios="monitor.dailyRatios" />
 
-    <div class="flex items-center mt-4 md:mt-0 space-x-6 text-sm w-full md:w-auto justify-end">
-      <div class="text-right">
-        <p class="text-light-text-sub dark:text-dark-text-sub">{{ t('daily') }}</p>
-        <p class="font-semibold text-base">{{ monitor.daily_ratio }}%</p>
-      </div>
-      <div class="text-right">
-        <p class="text-light-text-sub dark:text-dark-text-sub">{{ statusInfo.text }}</p>
-        <p class="font-semibold text-base">{{ formatLog(monitor.log) }}</p>
-      </div>
+    <div class="flex justify-between items-center mt-2 text-xs text-light-text-sub dark:text-dark-text-sub">
+      <span>{{ t('history') }} 90 {{ t('days') }}</span>
+      <span>{{ t('today') }}</span>
     </div>
   </div>
 </template>
 
 <script setup>
-const { t } = useI18n()
+import HistoryGrid from './HistoryGrid.vue';
+const { t } = useI18n();
+
 const props = defineProps({
   monitor: {
     type: Object,
     required: true,
   },
-})
+});
 
 const statusInfo = computed(() => {
   switch (props.monitor.status) {
@@ -39,18 +38,5 @@ const statusInfo = computed(() => {
     case 8: return { text: t('status.seemsDown'), colorClass: 'text-status-yellow-light dark:text-status-yellow-dark', icon: 'question-circle' };
     default: return { text: t('status.paused'), colorClass: 'text-status-gray-light dark:text-status-gray-dark', icon: 'pause-circle' };
   }
-})
-
-const formatLog = (log) => {
-  if (!log) return t('noData');
-  const duration = log.duration; // seconds
-  const days = Math.floor(duration / 86400);
-  const hours = Math.floor((duration % 86400) / 3600);
-  const minutes = Math.floor((duration % 3600) / 60);
-
-  if (days > 0) return `${days}d ${hours}h`;
-  if (hours > 0) return `${hours}h ${minutes}m`;
-  if (minutes > 0) return `${minutes}m`;
-  return `< 1m`;
-}
+});
 </script>
