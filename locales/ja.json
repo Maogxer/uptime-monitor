@@ -1,0 +1,21 @@
+{
+  "title": "ステータスページ",
+  "description": "UptimeRobot API を利用した、シンプルで美しいステータス監視ページです。",
+  "allSystemsOperational": "すべてのシステムは正常に稼働しています",
+  "degradedPerformance": "一部のシステムパフォーマンスが低下しています",
+  "partialOutage": "一部のシステムが停止しています",
+  "majorOutage": "主要なシステムが停止しています",
+  "overallUptime": "概要",
+  "status": {
+    "up": "稼働中",
+    "down": "停止中",
+    "paused": "一時停止"
+  },
+  "uptime": "稼働率",
+  "responseTime": "応答時間",
+  "ms": "ミリ秒",
+  "loading": "データを読み込み中...",
+  "error": "データの読み込みに失敗しました。APIキーまたはネットワーク接続を確認してください。",
+  "poweredBy": "監視サービス by UptimeRobot",
+  "last90Days": "過去90日間"
+}
