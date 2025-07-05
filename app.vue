@@ -1,13 +1,12 @@
 <!-- app.vue -->
 <template>
   <div class="bg-gray-50 dark:bg-[#0B0F19] text-gray-800 dark:text-gray-200">
-    <!-- Background pattern (remains the same) -->
+    <!-- Background pattern -->
     <div 
       class="fixed inset-0 dark:bg-[radial-gradient(circle_at_50%_0%,rgba(67,56,202,0.1)_0%,rgba(67,56,202,0)_35%)] pointer-events-none"
     ></div>
 
     <div class="relative flex flex-col min-h-screen">
-      <!-- Header (remains the same) -->
       <header class="fixed top-0 left-0 w-full bg-gray-50/90 dark:bg-[#0B0F19]/90 backdrop-blur-sm z-50 shadow-md">
         <div class="max-w-5xl mx-auto px-4 pt-8 pb-4">
           <div class="flex justify-between items-center">
@@ -29,7 +28,6 @@
       </header>
       
       <main class="flex-grow w-full max-w-5xl mx-auto px-4 py-8 pt-28 z-10"> 
-        <!-- Overall Status Bar -->
         <div class="p-4 mb-8 rounded-2xl border bg-white/50 dark:bg-white/5 backdrop-blur-xl border-gray-200/80 dark:border-white/10 shadow-lg">
           <div v-if="pending && !monitors.length" class="flex justify-between items-center animate-pulse">
             <div class="h-6 w-48 bg-gray-300 dark:bg-gray-600 rounded-md"></div>
@@ -37,11 +35,16 @@
           </div>
           <div v-else class="flex justify-between items-center">
               <div class="flex items-center gap-3">
-                <span 
-                  class="relative flex h-4 w-4 rounded-full animate-glow"
-                  :class="overallStatus.dotColor"
-                  :style="{ '--glow-color': overallStatus.glowColor }"
-                >
+                <!-- NEW: Double span structure for dot + halo -->
+                <span class="relative flex h-3 w-3 items-center justify-center"> <!-- Outer container for positioning -->
+                  <!-- The solid dot, now with dot-pulse animation -->
+                  <span class="absolute inline-flex h-full w-full rounded-full animate-dot-pulse z-10" :class="overallStatus.dotColor"></span>
+                  <!-- The glowing halo, with halo-expand animation -->
+                  <span 
+                    class="absolute inline-flex h-full w-full rounded-full animate-halo-expand"
+                    :style="{ backgroundColor: `rgba(${overallStatus.glowColorRgb}, var(--tw-bg-opacity, 1))` }"
+                  >
+                  </span>
                 </span>
                 <span class="font-bold text-lg">{{ overallStatus.text }}</span>
               </div>
@@ -56,11 +59,12 @@
           </div>
         </div>
 
-        <!-- FIX: Simplified conditional rendering for card grid -->
         <div v-if="pending && !monitors.length" class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div v-for="i in 6" :key="i" class="p-4 rounded-2xl border bg-white/50 dark:bg-white/5 backdrop-blur-xl border-gray-200/80 dark:border-white/10 shadow-lg animate-pulse"><div class="h-6 bg-gray-300 dark:bg-gray-700 rounded w-3/4 mb-4"></div><div class="h-28 bg-gray-300 dark:bg-gray-700 rounded"></div></div>
         </div>
+        
         <div v-else-if="error" class="text-center py-10 bg-white/50 dark:bg-white/5 backdrop-blur-xl rounded-2xl shadow-lg"><p class="text-xl font-bold text-red-500">请求数据失败</p><p class="text-sm text-gray-500 mt-2">请检查您的网络连接或 API 密钥。</p></div>
+        
         <div v-else class="space-y-12">
           <div v-if="groupedMonitors.down.length > 0">
             <h2 class="text-2xl font-bold mb-4 border-l-4 border-red-500 pl-3">出现异常 ({{ groupedMonitors.down.length }})</h2>
@@ -104,8 +108,7 @@ interface ResponseTime { datetime: number; value: number; }
 interface Monitor { id: number; friendly_name: string; status: number; logs: Log[]; response_times: ResponseTime[]; url: string; } 
 
 const { data: monitors, pending, error, refresh } = await useFetch<Monitor[]>('/api/status', { lazy: true, default: () => [] });
-// Removed initialLoading, now handled more simply with pending.
-// const initialLoading = computed(() => pending.value && !monitors.value.length); 
+const initialLoading = computed(() => pending.value && !monitors.value.length);
 
 const REFRESH_INTERVAL_SECONDS = 300;
 const lastUpdated = ref(dayjs().format('HH:mm:ss')); 
@@ -115,41 +118,88 @@ let countdownTimer: NodeJS.Timeout;
 const countdownMinutes = computed(() => Math.floor(countdown.value / 60).toString().padStart(2, '0'));
 const countdownSeconds = computed(() => (countdown.value % 60).toString().padStart(2, '0'));
 
-// Simplified refresh and countdown logic for reliability
-const triggerRefresh = async () => {
-  if (pending.value) return; // Prevent multiple refreshes
+// FIX: Renamed to avoid direct call in setInterval, which can cause issues.
+const performRefresh = async () => {
+  if (pending.value) return; // Prevent multiple refreshes if one is already in progress
+  
   clearInterval(countdownTimer); // Stop current countdown
-  countdown.value = REFRESH_INTERVAL_SECONDS; // Reset countdown display
-  await refresh(); // Perform the fetch
-  lastUpdated.value = dayjs().format('HH:mm:ss'); // Update timestamp
-  startCountdown(); // Start new countdown
+  
+  try {
+    await refresh(); // Perform the fetch
+    lastUpdated.value = dayjs().format('HH:mm:ss'); // Update timestamp only on success
+    countdown.value = REFRESH_INTERVAL_SECONDS; // Reset countdown only on success
+  } catch (e) {
+    console.error("Refresh failed:", e);
+    // Optionally: show a persistent error message or stop countdown if errors persist
+    // For now, we just let the error state in template handle it.
+    // Do NOT reset countdown here, let it reach zero again to retry if needed.
+  } finally {
+    startCountdown(); // Always restart countdown to keep the cycle going
+  }
+};
+
+// This is the function called by the button and interval
+const triggerRefresh = () => {
+  performRefresh();
 };
 
 const startCountdown = () => {
   clearInterval(countdownTimer); // Clear any existing timer
-  countdownTimer = setInterval(() => {
-    if (countdown.value > 0) {
-      countdown.value--;
-    } else {
-      triggerRefresh(); // Trigger refresh when countdown hits zero
-    }
-  }, 1000);
+  // Only set interval if not already pending
+  if (!pending.value) { // This check prevents starting multiple timers if `refresh()` is slow
+    countdownTimer = setInterval(() => {
+      if (countdown.value > 0) {
+        countdown.value--;
+      } else {
+        triggerRefresh(); // Trigger refresh when countdown hits zero
+      }
+    }, 1000);
+  }
 };
 
 onMounted(() => {
-  triggerRefresh(); // Initial data load and start countdown
+  // FIX: Perform initial fetch outside of countdown, then start countdown.
+  // This ensures data is loaded and displayed before the countdown logic potentially re-triggers.
+  // Also, initialLoading will correctly reflect this initial state.
+  triggerRefresh(); 
 });
-onUnmounted(() => clearInterval(countdownTimer));
+onUnmounted(() => {
+  clearInterval(countdownTimer);
+});
+
+// Helper function to convert hex to RGB for CSS variables
+const hexToRgb = (hex: string) => {
+  const bigint = parseInt(hex.slice(1), 16);
+  const r = (bigint >> 16) & 255;
+  const g = (bigint >> 8) & 255;
+  const b = bigint & 255;
+  return `${r},${g},${b}`;
+};
 
 const overallStatus = computed(() => {
+  let key: string;
+  let text: string;
+  let dotColorClass: string;
+  let glowColorHex: string; // This will be the base color for the glow
+  
   if (!monitors.value || monitors.value.length === 0) {
-    return { key: 'loading', text: '数据加载中', dotColor: 'bg-gray-500', glowColor: '#6b7280' };
+    key = 'loading'; text = '数据加载中'; dotColorClass = 'bg-gray-500'; glowColorHex = '#6b7280';
+  } else {
+    const downCount = monitors.value.filter(m => m.status !== 2).length;
+    if (downCount === 0) {
+      key = 'ok'; text = '所有系统运行正常'; dotColorClass = 'bg-green-500'; glowColorHex = '#22c55e';
+    } else {
+      key = 'warning'; text = '部分站点出现异常'; dotColorClass = 'bg-orange-500'; glowColorHex = '#f97316';
+    }
   }
-  const downCount = monitors.value.filter(m => m.status !== 2).length;
-  if (downCount === 0) {
-    return { key: 'ok', text: '所有系统运行正常', dotColor: 'bg-green-500', glowColor: '#22c55e' };
-  }
-  return { key: 'warning', text: '部分站点出现异常', dotColor: 'bg-orange-500', glowColor: '#f97316' };
+
+  return { 
+    key, 
+    text, 
+    dotColor: dotColorClass, // This is a Tailwind class for the solid dot
+    glowColor: glowColorHex, // This is the HEX code for --glow-color
+    glowColorRgb: hexToRgb(glowColorHex) // This is the RGB string for --glow-color-rgb
+  };
 });
 
 const groupedMonitors = computed(() => {
