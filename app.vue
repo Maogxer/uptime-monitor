@@ -37,7 +37,7 @@
               <div class="flex items-center gap-3">
                 <!-- NEW: Double span structure for dot + halo -->
                 <span class="relative flex h-3 w-3 items-center justify-center"> <!-- Outer container for positioning -->
-                  <!-- The solid dot, now with dot-pulse animation -->
+                  <!-- The solid dot, with dot-pulse animation -->
                   <span class="absolute inline-flex h-full w-full rounded-full animate-dot-pulse z-10" :class="overallStatus.dotColor"></span>
                   <!-- The glowing halo, with halo-expand animation -->
                   <span 
@@ -66,62 +66,22 @@
         <div v-else-if="error" class="text-center py-10 bg-white/50 dark:bg-white/5 backdrop-blur-xl rounded-2xl shadow-lg"><p class="text-xl font-bold text-red-500">请求数据失败</p><p class="text-sm text-gray-500 mt-2">请检查您的网络连接或 API 密钥。</p></div>
         
         <div v-else class="space-y-12">
-		          <!-- Down Group -->
           <div v-if="groupedMonitors.down.length > 0">
             <h2 class="text-2xl font-bold mb-4 border-l-4 border-red-500 pl-3">出现异常 ({{ groupedMonitors.down.length }})</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div v-for="monitor in groupedMonitors.down" :key="monitor.id" class="p-4 rounded-2xl border bg-white/50 dark:bg-white/5 backdrop-blur-xl border-gray-200/80 dark:border-white/10 shadow-lg hover:shadow-xl transition-shadow">
-                <div class="flex justify-between items-center mb-4">
-                  <!-- NEW: Site Name + Link Icon + Status Badge -->
-                  <div class="flex items-center gap-2 flex-grow min-w-0">
-                    <h3 class="font-bold text-lg truncate" :title="monitor.friendly_name">{{ monitor.friendly_name }}</h3>
-                    <a :href="monitor.url" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors flex-shrink-0">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07L10 6"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07L14 18"/></svg>
-                    </a>
-                  </div>
-                  <span class="text-xs font-semibold px-2.5 py-1 rounded-full flex-shrink-0" :class="getStatus(monitor).color">{{ getStatus(monitor).text }}</span>
-                </div>
-                <div class="h-20 mb-4"><ResponseChart :monitor="monitor" /></div>
-                <div><UptimeHeatmap :monitor="monitor" :days="60" today-label="今日" overall-uptime-label="近60天可用率" /></div>
-              </div>
+              <div v-for="monitor in groupedMonitors.down" :key="monitor.id" class="p-4 rounded-2xl border bg-white/50 dark:bg-white/5 backdrop-blur-xl border-gray-200/80 dark:border-white/10 shadow-lg hover:shadow-xl transition-shadow"><div class="flex justify-between items-center mb-4"><h3 class="font-bold text-lg truncate" :title="monitor.friendly_name">{{ monitor.friendly_name }}</h3><span class="text-xs font-semibold px-2.5 py-1 rounded-full" :class="getStatus(monitor).color">{{ getStatus(monitor).text }}</span></div><div class="h-20 mb-4"><ResponseChart :monitor="monitor" /></div><div><UptimeHeatmap :monitor="monitor" :days="60" today-label="今日" overall-uptime-label="近60天可用率" /></div></div>
             </div>
           </div>
-          <!-- Up Group -->
           <div>
             <h2 class="text-2xl font-bold mb-4 border-l-4 border-green-500 pl-3">运行中 ({{ groupedMonitors.up.length }})</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div v-for="monitor in groupedMonitors.up" :key="monitor.id" class="p-4 rounded-2xl border bg-white/50 dark:bg-white/5 backdrop-blur-xl border-gray-200/80 dark:border-white/10 shadow-lg hover:shadow-xl transition-shadow">
-                <div class="flex justify-between items-center mb-4">
-                  <div class="flex items-center gap-2 flex-grow min-w-0">
-                    <h3 class="font-bold text-lg truncate" :title="monitor.friendly_name">{{ monitor.friendly_name }}</h3>
-                    <a :href="monitor.url" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors flex-shrink-0">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07L10 6"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07L14 18"/></svg>
-                    </a>
-                  </div>
-                  <span class="text-xs font-semibold px-2.5 py-1 rounded-full flex-shrink-0" :class="getStatus(monitor).color">{{ getStatus(monitor).text }}</span>
-                </div>
-                <div class="h-20 mb-4"><ResponseChart :monitor="monitor" /></div>
-                <div><UptimeHeatmap :monitor="monitor" :days="60" today-label="今日" overall-uptime-label="近60天可用率" /></div>
-              </div>
+              <div v-for="monitor in groupedMonitors.up" :key="monitor.id" class="p-4 rounded-2xl border bg-white/50 dark:bg-white/5 backdrop-blur-xl border-gray-200/80 dark:border-white/10 shadow-lg hover:shadow-xl transition-shadow"><div class="flex justify-between items-center mb-4"><h3 class="font-bold text-lg truncate" :title="monitor.friendly_name">{{ monitor.friendly_name }}</h3><span class="text-xs font-semibold px-2.5 py-1 rounded-full" :class="getStatus(monitor).color">{{ getStatus(monitor).text }}</span></div><div class="h-20 mb-4"><ResponseChart :monitor="monitor" /></div><div><UptimeHeatmap :monitor="monitor" :days="60" today-label="今日" overall-uptime-label="近60天可用率" /></div></div>
             </div>
           </div>
-          <!-- Paused Group -->
           <div v-if="groupedMonitors.paused.length > 0">
             <h2 class="text-2xl font-bold mb-4 border-l-4 border-gray-400 pl-3">已暂停 ({{ groupedMonitors.paused.length }})</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div v-for="monitor in groupedMonitors.paused" :key="monitor.id" class="p-4 rounded-2xl border bg-white/50 dark:bg-white/5 backdrop-blur-xl border-gray-200/80 dark:border-white/10 shadow-lg hover:shadow-xl transition-shadow">
-                <div class="flex justify-between items-center mb-4">
-                  <div class="flex items-center gap-2 flex-grow min-w-0">
-                    <h3 class="font-bold text-lg truncate" :title="monitor.friendly_name">{{ monitor.friendly_name }}</h3>
-                    <a :href="monitor.url" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors flex-shrink-0">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07L10 6"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07L14 18"/></svg>
-                    </a>
-                  </div>
-                  <span class="text-xs font-semibold px-2.5 py-1 rounded-full flex-shrink-0" :class="getStatus(monitor).color">{{ getStatus(monitor).text }}</span>
-                </div>
-                <div class="h-20 mb-4 flex items-center justify-center"><p class="text-sm text-gray-400 dark:text-gray-500">无响应时间数据</p></div>
-                <div><PlaceholderHeatmap :days="60" /></div>
-              </div>
+              <div v-for="monitor in groupedMonitors.paused" :key="monitor.id" class="p-4 rounded-2xl border bg-white/50 dark:bg-white/5 backdrop-blur-xl border-gray-200/80 dark:border-white/10 shadow-lg hover:shadow-xl transition-shadow"><div class="flex justify-between items-center mb-4"><h3 class="font-bold text-lg truncate" :title="monitor.friendly_name">{{ monitor.friendly_name }}</h3><span class="text-xs font-semibold px-2.5 py-1 rounded-full" :class="getStatus(monitor).color">{{ getStatus(monitor).text }}</span></div><div class="h-20 mb-4 flex items-center justify-center"><p class="text-sm text-gray-400 dark:text-gray-500">无响应时间数据</p></div><div><PlaceholderHeatmap :days="60" today-label="今日" /></div></div>
             </div>
           </div>
         </div>
@@ -148,7 +108,8 @@ interface ResponseTime { datetime: number; value: number; }
 interface Monitor { id: number; friendly_name: string; status: number; logs: Log[]; response_times: ResponseTime[]; url: string; } 
 
 const { data: monitors, pending, error, refresh } = await useFetch<Monitor[]>('/api/status', { lazy: true, default: () => [] });
-const initialLoading = computed(() => pending.value && !monitors.value.length);
+// FIX: initialLoading should reflect if there's no data yet, regardless of pending status
+const initialLoading = computed(() => !monitors.value || monitors.value.length === 0); // Corrected logic
 
 const REFRESH_INTERVAL_SECONDS = 300;
 const lastUpdated = ref(dayjs().format('HH:mm:ss')); 
@@ -158,50 +119,46 @@ let countdownTimer: NodeJS.Timeout;
 const countdownMinutes = computed(() => Math.floor(countdown.value / 60).toString().padStart(2, '0'));
 const countdownSeconds = computed(() => (countdown.value % 60).toString().padStart(2, '0'));
 
-// FIX: Renamed to avoid direct call in setInterval, which can cause issues.
 const performRefresh = async () => {
-  if (pending.value) return; // Prevent multiple refreshes if one is already in progress
+  if (pending.value) return; 
   
-  clearInterval(countdownTimer); // Stop current countdown
+  clearInterval(countdownTimer); 
   
   try {
-    await refresh(); // Perform the fetch
-    lastUpdated.value = dayjs().format('HH:mm:ss'); // Update timestamp only on success
-    countdown.value = REFRESH_INTERVAL_SECONDS; // Reset countdown only on success
+    await refresh(); 
+    lastUpdated.value = dayjs().format('HH:mm:ss'); 
+    countdown.value = REFRESH_INTERVAL_SECONDS; 
   } catch (e) {
     console.error("Refresh failed:", e);
-    // Optionally: show a persistent error message or stop countdown if errors persist
-    // For now, we just let the error state in template handle it.
-    // Do NOT reset countdown here, let it reach zero again to retry if needed.
   } finally {
-    startCountdown(); // Always restart countdown to keep the cycle going
+    startCountdown(); 
   }
 };
 
-// This is the function called by the button and interval
 const triggerRefresh = () => {
   performRefresh();
 };
 
 const startCountdown = () => {
-  clearInterval(countdownTimer); // Clear any existing timer
-  // Only set interval if not already pending
-  if (!pending.value) { // This check prevents starting multiple timers if `refresh()` is slow
+  clearInterval(countdownTimer); 
+  if (!pending.value) { 
     countdownTimer = setInterval(() => {
       if (countdown.value > 0) {
         countdown.value--;
       } else {
-        triggerRefresh(); // Trigger refresh when countdown hits zero
+        triggerRefresh(); 
       }
     }, 1000);
   }
 };
 
 onMounted(() => {
-  // FIX: Perform initial fetch outside of countdown, then start countdown.
-  // This ensures data is loaded and displayed before the countdown logic potentially re-triggers.
-  // Also, initialLoading will correctly reflect this initial state.
-  triggerRefresh(); 
+  // FIX: Only trigger initial fetch once and manage countdown separately
+  if (monitors.value.length === 0) { // Only fetch if no data pre-rendered (SSR)
+    triggerRefresh();
+  } else {
+    startCountdown(); // If data is pre-rendered, just start countdown
+  }
 });
 onUnmounted(() => {
   clearInterval(countdownTimer);

@@ -2,7 +2,6 @@
 <template>
   <div>
     <div class="grid grid-flow-col auto-cols-fr gap-px w-full">
-      <!-- Apply the same translateY animation -->
       <div
         v-for="i in days"
         :key="i"
@@ -15,7 +14,7 @@
     <div class="flex justify-between text-xs text-gray-400 mt-1.5">
       <span>{{ startDate }}</span>
       <span class="font-semibold text-gray-500 dark:text-gray-300">无数据</span>
-      <span>{{ todayLabel }}</span>
+      <span>{{ todayLabel }}</span> <!-- NEW: Display todayLabel -->
     </div>
   </div>
 </template>
@@ -25,7 +24,8 @@ import { computed } from 'vue';
 import dayjs from 'dayjs';
 
 const props = defineProps<{
-  days: number
+  days: number,
+  todayLabel: string // NEW: Add todayLabel prop
 }>();
 
 const startDate = computed(() => dayjs().subtract(props.days - 1, 'day').format('YYYY-MM-DD'));
