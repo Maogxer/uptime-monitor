@@ -1,51 +1,46 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
+// nuxt.config.ts
 export default defineNuxtConfig({
   devtools: { enabled: true },
 
   modules: [
     '@nuxtjs/tailwindcss',
     '@nuxtjs/color-mode',
-    '@nuxtjs/i18n',
   ],
 
   runtimeConfig: {
-    // This is a private key, only available on the server side
     uptimeRobotApiKey: process.env.NUXT_UPTIME_ROBOT_API_KEY,
-    // Public keys are exposed to the client side
     public: {
-      title: 'Status Page',
-      // Add any other public config here
+      title: 'Status Page'
     }
   },
 
   colorMode: {
-    classSuffix: '', // Required for Tailwind CSS integration
-    preference: 'system', // default value
-    fallback: 'light', // fallback value if system preference isn't set
+    classSuffix: '',
+    preference: 'system',
+    fallback: 'light',
   },
 
-  i18n: {
-    locales: [
-      { code: 'zh-CN', iso: 'zh-CN', file: 'zh-CN.json', name: '简体中文' },
-      { code: 'en', iso: 'en-US', file: 'en.json', name: 'English' },
-      { code: 'ja', iso: 'ja-JP', file: 'ja.json', name: '日本語' },
-    ],
-    lazy: true,
-    langDir: 'locales',
-    defaultLocale: 'zh-CN',
-    strategy: 'no_prefix',
-    detectBrowserLanguage: {
-      useCookie: true,
-      cookieKey: 'i18n_redirected',
-      redirectOn: 'root', // recommended
-    },
-  },
-
-  css: ['~/assets/css/tailwind.css'],
-
+  // --- THIS IS THE DEFINITIVE FIX ---
+  // We manually configure PostCSS and Tailwind's options here to force the build tool.
   postcss: {
     plugins: {
-      tailwindcss: {},
+      tailwindcss: {
+        // We can define tailwind config directly here if needed,
+        // or just let it find the tailwind.config.ts file.
+        // To be absolutely sure, we are defining the safelist here again.
+        config: {
+          safelist: [
+            'bg-green-500',
+            'bg-orange-500',
+            'bg-red-500',
+            'bg-gray-500',
+            'bg-green-400',
+            'bg-orange-400',
+            'bg-red-400',
+            'bg-gray-400',
+          ],
+        }
+      },
       autoprefixer: {},
     },
   },
