@@ -66,22 +66,62 @@
         <div v-else-if="error" class="text-center py-10 bg-white/50 dark:bg-white/5 backdrop-blur-xl rounded-2xl shadow-lg"><p class="text-xl font-bold text-red-500">请求数据失败</p><p class="text-sm text-gray-500 mt-2">请检查您的网络连接或 API 密钥。</p></div>
         
         <div v-else class="space-y-12">
+		          <!-- Down Group -->
           <div v-if="groupedMonitors.down.length > 0">
             <h2 class="text-2xl font-bold mb-4 border-l-4 border-red-500 pl-3">出现异常 ({{ groupedMonitors.down.length }})</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div v-for="monitor in groupedMonitors.down" :key="monitor.id" class="p-4 rounded-2xl border bg-white/50 dark:bg-white/5 backdrop-blur-xl border-gray-200/80 dark:border-white/10 shadow-lg hover:shadow-xl transition-shadow"><div class="flex justify-between items-center mb-4"><h3 class="font-bold text-lg truncate" :title="monitor.friendly_name">{{ monitor.friendly_name }}</h3><span class="text-xs font-semibold px-2.5 py-1 rounded-full" :class="getStatus(monitor).color">{{ getStatus(monitor).text }}</span></div><div class="h-20 mb-4"><ResponseChart :monitor="monitor" /></div><div><UptimeHeatmap :monitor="monitor" :days="60" today-label="今日" overall-uptime-label="近60天可用率" /></div></div>
+              <div v-for="monitor in groupedMonitors.down" :key="monitor.id" class="p-4 rounded-2xl border bg-white/50 dark:bg-white/5 backdrop-blur-xl border-gray-200/80 dark:border-white/10 shadow-lg hover:shadow-xl transition-shadow">
+                <div class="flex justify-between items-center mb-4">
+                  <!-- NEW: Site Name + Link Icon + Status Badge -->
+                  <div class="flex items-center gap-2 flex-grow min-w-0">
+                    <h3 class="font-bold text-lg truncate" :title="monitor.friendly_name">{{ monitor.friendly_name }}</h3>
+                    <a :href="monitor.url" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors flex-shrink-0">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07L10 6"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07L14 18"/></svg>
+                    </a>
+                  </div>
+                  <span class="text-xs font-semibold px-2.5 py-1 rounded-full flex-shrink-0" :class="getStatus(monitor).color">{{ getStatus(monitor).text }}</span>
+                </div>
+                <div class="h-20 mb-4"><ResponseChart :monitor="monitor" /></div>
+                <div><UptimeHeatmap :monitor="monitor" :days="60" today-label="今日" overall-uptime-label="近60天可用率" /></div>
+              </div>
             </div>
           </div>
+          <!-- Up Group -->
           <div>
             <h2 class="text-2xl font-bold mb-4 border-l-4 border-green-500 pl-3">运行中 ({{ groupedMonitors.up.length }})</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div v-for="monitor in groupedMonitors.up" :key="monitor.id" class="p-4 rounded-2xl border bg-white/50 dark:bg-white/5 backdrop-blur-xl border-gray-200/80 dark:border-white/10 shadow-lg hover:shadow-xl transition-shadow"><div class="flex justify-between items-center mb-4"><h3 class="font-bold text-lg truncate" :title="monitor.friendly_name">{{ monitor.friendly_name }}</h3><span class="text-xs font-semibold px-2.5 py-1 rounded-full" :class="getStatus(monitor).color">{{ getStatus(monitor).text }}</span></div><div class="h-20 mb-4"><ResponseChart :monitor="monitor" /></div><div><UptimeHeatmap :monitor="monitor" :days="60" today-label="今日" overall-uptime-label="近60天可用率" /></div></div>
+              <div v-for="monitor in groupedMonitors.up" :key="monitor.id" class="p-4 rounded-2xl border bg-white/50 dark:bg-white/5 backdrop-blur-xl border-gray-200/80 dark:border-white/10 shadow-lg hover:shadow-xl transition-shadow">
+                <div class="flex justify-between items-center mb-4">
+                  <div class="flex items-center gap-2 flex-grow min-w-0">
+                    <h3 class="font-bold text-lg truncate" :title="monitor.friendly_name">{{ monitor.friendly_name }}</h3>
+                    <a :href="monitor.url" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors flex-shrink-0">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07L10 6"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07L14 18"/></svg>
+                    </a>
+                  </div>
+                  <span class="text-xs font-semibold px-2.5 py-1 rounded-full flex-shrink-0" :class="getStatus(monitor).color">{{ getStatus(monitor).text }}</span>
+                </div>
+                <div class="h-20 mb-4"><ResponseChart :monitor="monitor" /></div>
+                <div><UptimeHeatmap :monitor="monitor" :days="60" today-label="今日" overall-uptime-label="近60天可用率" /></div>
+              </div>
             </div>
           </div>
+          <!-- Paused Group -->
           <div v-if="groupedMonitors.paused.length > 0">
             <h2 class="text-2xl font-bold mb-4 border-l-4 border-gray-400 pl-3">已暂停 ({{ groupedMonitors.paused.length }})</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div v-for="monitor in groupedMonitors.paused" :key="monitor.id" class="p-4 rounded-2xl border bg-white/50 dark:bg-white/5 backdrop-blur-xl border-gray-200/80 dark:border-white/10 shadow-lg hover:shadow-xl transition-shadow"><div class="flex justify-between items-center mb-4"><h3 class="font-bold text-lg truncate" :title="monitor.friendly_name">{{ monitor.friendly_name }}</h3><span class="text-xs font-semibold px-2.5 py-1 rounded-full" :class="getStatus(monitor).color">{{ getStatus(monitor).text }}</span></div><div class="h-20 mb-4 flex items-center justify-center"><p class="text-sm text-gray-400 dark:text-gray-500">无响应时间数据</p></div><div><PlaceholderHeatmap :days="60" /></div></div>
+              <div v-for="monitor in groupedMonitors.paused" :key="monitor.id" class="p-4 rounded-2xl border bg-white/50 dark:bg-white/5 backdrop-blur-xl border-gray-200/80 dark:border-white/10 shadow-lg hover:shadow-xl transition-shadow">
+                <div class="flex justify-between items-center mb-4">
+                  <div class="flex items-center gap-2 flex-grow min-w-0">
+                    <h3 class="font-bold text-lg truncate" :title="monitor.friendly_name">{{ monitor.friendly_name }}</h3>
+                    <a :href="monitor.url" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors flex-shrink-0">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07L10 6"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07L14 18"/></svg>
+                    </a>
+                  </div>
+                  <span class="text-xs font-semibold px-2.5 py-1 rounded-full flex-shrink-0" :class="getStatus(monitor).color">{{ getStatus(monitor).text }}</span>
+                </div>
+                <div class="h-20 mb-4 flex items-center justify-center"><p class="text-sm text-gray-400 dark:text-gray-500">无响应时间数据</p></div>
+                <div><PlaceholderHeatmap :days="60" /></div>
+              </div>
             </div>
           </div>
         </div>
