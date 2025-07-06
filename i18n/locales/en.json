@@ -1,4 +1,65 @@
 {
+  "errorPage": {
+    "title404": "Page Not Found",
+    "subtitle404": "Sorry, we couldn't find the page you were looking for. It might have been moved or deleted.",
+    "title500": "Internal Server Error",
+    "subtitle500": "Sorry, the server encountered a problem. We are working on it.",
+    "titleOther": "An Error Occurred",
+    "subtitleOther": "Sorry, something unexpected happened. Please try again later.",
+    "button": "Go Back Home"
+  },
+  "themes": {
+    "switchTo": "Switch to {theme}",
+    "labels": {
+      "light": "Light Mode",
+      "dark": "Dark Mode",
+      "system": "System"
+    }
+  },
+  "menu": {
+    "title": "Menu",
+    "repository": "Repository",
+    "about": "About this Site",
+    "logout": "Logout"
+  },
+  "about": {
+    "title": "About This Site",
+    "subtitle": "A feature-rich site monitoring dashboard built with a modern tech stack.",
+    "features": {
+      "title": "Key Features",
+      "items": {
+        "monitoring": { "title": "Real-time Monitoring", "desc": "Fetches and displays real-time status and response latency via the UptimeRobot API." },
+        "history": { "title": "Historical Data", "desc": "Visualizes the last 60 days of uptime and response trends with heatmaps and charts." },
+        "i18n": { "title": "Multi-language Support", "desc": "Built-in support for Chinese, English, and Japanese, easily extensible." },
+        "theming": { "title": "Light/Dark Themes", "desc": "Supports light, dark, and system-preferred theme modes for a comfortable viewing experience." },
+        "auth": { "title": "Password Protection", "desc": "Site-wide password protection can be enabled via environment variables." },
+        "responsive": { "title": "Responsive Design", "desc": "Optimized layout for a great browsing experience on desktop, tablet, and mobile devices." }
+      }
+    },
+    "stack": {
+      "title": "Technology Stack",
+      "items": {
+        "nuxt": "A powerful Vue framework offering server-side rendering and static generation.",
+        "vue": "The progressive JavaScript framework for building user interfaces.",
+        "typescript": "Adds a type system to JavaScript, enhancing code robustness and maintainability.",
+        "tailwind": "A utility-first CSS framework for rapidly building custom user interfaces.",
+        "chartjs": "A simple yet flexible JavaScript charting library for data visualization.",
+        "uptimerobot": "Provides a stable and reliable API service for website uptime monitoring."
+      }
+    },
+    "source": {
+      "title": "Get the Source",
+      "desc": "This project is fully open-source. Feel free to view, use, or contribute to the code.",
+      "button": "View on GitHub"
+    }
+  },
+  "auth": {
+    "title": "Authorization Required",
+    "subtitle": "Please enter the password to access this site.",
+    "password": "Password",
+    "submit": "Enter",
+    "error": "Incorrect password, please try again."
+  },
   "pageTitle": "Status Page",
   "backToHome": "Back to Home",
   "footer": {

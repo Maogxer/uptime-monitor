@@ -1,4 +1,65 @@
 {
+  "errorPage": {
+    "title404": "页面未找到",
+    "subtitle404": "抱歉，我们找不到您要访问的页面。它可能已被移动或删除。",
+    "title500": "服务器内部错误",
+    "subtitle500": "抱歉，服务器遇到了一些问题，我们正在紧急处理。",
+    "titleOther": "发生了一个错误",
+    "subtitleOther": "抱歉，发生了一些意外情况，请稍后再试。",
+    "button": "返回主页"
+  },
+  "themes": {
+    "switchTo": "切换至 {theme}",
+    "labels": {
+      "light": "浅色模式",
+      "dark": "深色模式",
+      "system": "跟随系统"
+    }
+  },
+  "menu": {
+    "title": "菜单",
+    "repository": "代码仓库",
+    "about": "关于本站",
+    "logout": "退出登录"
+  },
+  "about": {
+    "title": "关于本站",
+    "subtitle": "一个使用现代技术栈构建的、功能丰富的站点监控面板。",
+    "features": {
+      "title": "主要功能",
+      "items": {
+        "monitoring": { "title": "实时监控", "desc": "通过 UptimeRobot API 拉取并展示站点的实时在线状态和响应延迟。" },
+        "history": { "title": "历史数据", "desc": "通过热力图和图表直观展示最近 60 天的可用率和响应时间趋势。" },
+        "i18n": { "title": "多语言支持", "desc": "内置简体中文、英语和日语支持，并可轻松扩展更多语言。" },
+        "theming": { "title": "明暗主题", "desc": "支持明亮、暗黑及跟随系统三种主题模式，提供舒适的视觉体验。" },
+        "auth": { "title": "密码保护", "desc": "可通过环境变量开启全站密码保护，确保内容仅对授权用户可见。" },
+        "responsive": { "title": "响应式设计", "desc": "在桌面、平板和移动设备上均有优化的布局和良好的浏览体验。" }
+      }
+    },
+    "stack": {
+      "title": "技术栈",
+      "items": {
+        "nuxt": "一个功能强大的 Vue 框架，提供服务端渲染和静态生成能力。",
+        "vue": "一套用于构建用户界面的渐进式 JavaScript 框架。",
+        "typescript": "为 JavaScript 添加了类型系统，增强了代码的健壮性和可维护性。",
+        "tailwind": "一个功能类优先的 CSS 框架，用于快速构建自定义用户界面。",
+        "chartjs": "简单而灵活的 JavaScript 图表库，用于数据可视化。",
+        "uptimerobot": "提供稳定可靠的网站正常运行时间监控 API 服务。"
+      }
+    },
+    "source": {
+      "title": "获取源码",
+      "desc": "本项目完全开源，您可以自由地查看、使用或贡献代码。",
+      "button": "查看 GitHub 仓库"
+    }
+  },
+  "auth": {
+    "title": "需要授权",
+    "subtitle": "请输入密码以访问此站点。",
+    "password": "密码",
+    "submit": "进入",
+    "error": "密码错误，请重试。"
+  },
   "pageTitle": "站点监测",
   "backToHome": "返回主页",
   "footer": {

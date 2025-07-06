@@ -1,5 +1,6 @@
 // tailwind.config.ts
 import type { Config } from 'tailwindcss'
+import typography from '@tailwindcss/typography' // <-- 1. Import it
 
 export default <Partial<Config>>{
   darkMode: 'class',
@@ -57,5 +58,7 @@ export default <Partial<Config>>{
       }
     },
   },
-  plugins: [],
+  plugins: [
+    typography, // <-- 2. Add it to the plugins array
+  ],
 }

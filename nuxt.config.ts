@@ -10,11 +10,28 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     uptimeRobotApiKey: process.env.NUXT_UPTIME_ROBOT_API_KEY,
+    sitePassword: process.env.NUXT_SITE_PASSWORD, // Server-side only
+    
     public: {
-      title: 'Status Page'
+    title: 'Status Page',
+    sitePasswordProtect: process.env.NUXT_SITE_PASSWORD_PROTECT, // Expose to client/middleware
+    githubUrl: 'https://github.com/Maogxer/uptime-monitor' // <-- ADD THIS
     }
   },
 
+  nitro: {
+    hooks: {
+      'compiled': () => {
+        if (!process.env.NUXT_UPTIME_ROBOT_API_KEY) {
+          console.warn('⚠️  UptimeRobot API key is not configured. The application will not be able to fetch monitor statuses.')
+        }
+        if (process.env.NUXT_SITE_PASSWORD_PROTECT === 'true' && !process.env.NUXT_SITE_PASSWORD) {
+          console.warn('🔒 Password protection is enabled, but no site password is set. Users will not be able to log in.')
+        }
+      }
+    }
+  },
+  
   colorMode: {
     classSuffix: '',
     preference: 'system',

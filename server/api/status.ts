@@ -66,4 +66,6 @@ export default defineCachedEventHandler(async (event) => {
     return monitorId || 'all'; 
   },
   maxAge: 60, // Cache for 60 seconds
+  swr: true,  // <-- ADD THIS LINE: Enable Stale-While-Revalidate
+  maxSWR: 120 // Optional: How long the stale data can be served while revalidating
 });
