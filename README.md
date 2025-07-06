@@ -72,10 +72,10 @@ _（提示：请将此处的截图替换为您自己部署后的页面截图）_
     - 前往 **Workers & Pages** > **Create application** > **Pages** > **Connect to Git**。
     - 选择您刚刚创建的仓库并授权。
 
-3.  **配置构建设置**
+3.  **配置构建设置 (重要！)**
     在设置页面，Cloudflare 通常会自动检测到 Nuxt。请确保您的配置如下：
-    - **Build command**: `npm run generate`
-    - **Build output directory**: `dist` **<-- (重要更新！)**
+    - **Build command**: `npm run build` **<-- (使用 `build` 而不是 `generate`)**
+    - **Build output directory**: `.output` **<-- (重要更新！)**
     - **Root directory**: `/` (保持默认)
 
 4.  **添加环境变量（最重要的一步！）**
