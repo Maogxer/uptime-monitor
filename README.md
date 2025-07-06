@@ -62,7 +62,7 @@ _（提示：请将此处的截图替换为您自己部署后的页面截图）_
 
 ## ☁️ 部署到 Cloudflare Pages
 
-将这个项目部署到 Cloudflare Pages 非常简单，并且可以享受免费的全球 CDN 加速。
+由于本项目包含服务器端逻辑（如 API 代理和密码验证），它需要作为“混合式应用”进行部署。请严格遵循以下经过验证的配置。
 
 1.  **将您的代码推送到 GitHub/GitLab**
     将您本地的项目文件夹初始化为一个 Git 仓库，并将其推送到您自己的一个新的 GitHub 或 GitLab 仓库中。
@@ -72,23 +72,25 @@ _（提示：请将此处的截图替换为您自己部署后的页面截图）_
     - 前往 **Workers & Pages** > **Create application** > **Pages** > **Connect to Git**。
     - 选择您刚刚创建的仓库并授权。
 
-3.  **配置构建设置 (重要！)**
-    在设置页面，Cloudflare 通常会自动检测到 Nuxt。请确保您的配置如下：
-    - **Build command**: `npm run build` **<-- (使用 `build` 而不是 `generate`)**
-    - **Build output directory**: `.output` **<-- (重要更新！)**
+3.  **配置构建设置 (最关键的一步！)**
+    在设置页面，**必须手动覆盖 Cloudflare 的智能预设**，以确保我们的服务器端逻辑被正确部署。
+    - **Framework preset** (框架预设): 选择 **None** (无)。
+    - **Build command** (构建命令): 输入 `npm run build`
+    - **Build output directory** (构建输出目录): 输入 `dist`
     - **Root directory**: `/` (保持默认)
 
-4.  **添加环境变量（最重要的一步！）**
-    前往项目的 **Settings** > **Environment variables** 页面，添加以下变量：
+4.  **添加环境变量**
+    前往项目的 **Settings** > **Environment variables** 页面，添加以下**生产环境变量**：
 
     | 变量名                        | 值                                  | 备注                                     |
     | ----------------------------- | ----------------------------------- | ---------------------------------------- |
+    | `NODE_VERSION`                | `20`                                | **强烈推荐**。确保构建环境的兼容性。       |
     | `NUXT_UPTIME_ROBOT_API_KEY`     | `urxxxxxx-xxxxxxxxxxxxxxxx`         | **必需**。您的 UptimeRobot API 密钥。      |
     | `NUXT_SITE_PASSWORD_PROTECT`  | `true` 或 `false`                   | **可选**。设为 `true` 以开启密码保护。       |
     | `NUXT_SITE_PASSWORD`          | `YourSecretPassword`                | **可选**。如果您开启了保护，这是访问密码。 |
 
 5.  **保存并部署**
-    点击 "Save and Deploy"。Cloudflare 将会自动拉取您的代码、构建项目并将其部署到全球网络。几分钟后，您的站点监控页面就上线了！
+    点击 "Save and Deploy"。Cloudflare 将会按照您的精确指令进行构建和部署。几分钟后，您的站点监控页面就将完美上线！
 
 ## ⭐ 特别致谢
 
