@@ -14,7 +14,7 @@ export default defineNuxtConfig({
     public: {
       title: 'Status Page',
       sitePasswordProtect: process.env.NUXT_SITE_PASSWORD_PROTECT,
-      githubUrl: 'https://github.com/maoguxia/uptime-monitor-gemini'
+      githubUrl: 'https://github.com/Maogxer/uptime-monitor'
     }
   },
 
