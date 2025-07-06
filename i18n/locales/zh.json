@@ -61,7 +61,7 @@
     "title": "需要授权",
     "subtitle": "请输入密码以访问此站点。",
     "password": "密码",
-    "submit": "进入",
+    "submit": "登录",
     "error": "密码错误，请重试。"
   },
   "pageTitle": "站点监测",

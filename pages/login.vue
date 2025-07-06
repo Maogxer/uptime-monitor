@@ -1,6 +1,7 @@
 <!-- pages/login.vue -->
 <template>
-  <div class="flex items-center justify-center py-12">
+  <!-- THE FIX: This container will fill the available space and center its content -->
+  <div class="flex-1 flex items-center justify-center">
     <div class="w-full max-w-sm p-8 space-y-6 rounded-2xl border bg-white/50 dark:bg-white/5 backdrop-blur-xl border-gray-200/80 dark:border-white/10 shadow-lg">
       <div class="text-center">
         <h1 class="text-3xl font-bold">{{ t('auth.title') }}</h1>
@@ -39,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-// THE FIX: We removed the `LanguageSwitcher` import and the `definePageMeta` block.
+// No change to the script is needed.
 const { t } = useI18n();
 const route = useRoute();
 

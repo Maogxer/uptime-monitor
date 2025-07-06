@@ -61,7 +61,7 @@
     "title": "Authorization Required",
     "subtitle": "Please enter the password to access this site.",
     "password": "Password",
-    "submit": "Enter",
+    "submit": "Login",
     "error": "Incorrect password, please try again."
   },
   "pageTitle": "Status Page",
