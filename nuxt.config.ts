@@ -14,7 +14,7 @@ export default defineNuxtConfig({
     public: {
       title: 'Status Page',
       sitePasswordProtect: process.env.NUXT_SITE_PASSWORD_PROTECT,
-      githubUrl: 'https://github.com/Maogxer/uptime-monitor'
+      githubUrl: 'https://github.com/maoguxia/uptime-monitor-gemini'
     }
   },
 
@@ -39,15 +39,16 @@ export default defineNuxtConfig({
       cookieKey: 'i18n_redirected',
       redirectOn: 'root',
     },
-    // FIX 2.1: Explicitly disable the deprecated directive
     bundle: {
       optimizeTranslationDirective: false,
     },
-    // FIX 2.2: The vueI18n property has been removed
   },
 
-  // FIX 1: Add the compatibility date for Nitro
   nitro: {
-    compatibilityDate: '2024-04-03' // Using the fallback date is safest
+    compatibilityDate: '2024-04-03',
+    // THE FIX IS HERE: Explicitly tell Nitro to prerender these routes
+    prerender: {
+      routes: ['/login', '/about']
+    }
   },
 })
