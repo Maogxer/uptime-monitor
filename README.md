@@ -38,8 +38,8 @@ _（提示：请将此处的截图替换为您自己部署后的页面截图）_
 
 1.  **克隆仓库**
     ```bash
-    git clone https://github.com/maoguxia/uptime-monitor.git
-    cd uptime-monitor
+    git clone https://github.com/maoguxia/uptime-monitor-gemini.git
+    cd uptime-monitor-gemini
     ```
 
 2.  **安装依赖**
@@ -75,8 +75,8 @@ _（提示：请将此处的截图替换为您自己部署后的页面截图）_
 3.  **配置构建设置**
     在设置页面，Cloudflare 通常会自动检测到 Nuxt。请确保您的配置如下：
     - **Build command**: `npm run generate`
-    - **Build output directory**: `.output/public`
-    - **Root directory**: `/`
+    - **Build output directory**: `dist` **<-- (重要更新！)**
+    - **Root directory**: `/` (保持默认)
 
 4.  **添加环境变量（最重要的一步！）**
     前往项目的 **Settings** > **Environment variables** 页面，添加以下变量：
