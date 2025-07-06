@@ -38,6 +38,7 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'; // <-- 1. Import computed
 // THE FIX: Explicitly tell this page to use our new 'centered' layout.
 definePageMeta({
   layout: 'centered'
@@ -48,7 +49,8 @@ const route = useRoute();
 
 const hasError = computed(() => 'error' in route.query);
 
+// 2. THE FIX: Wrap the title string in a computed property
 useHead({
-  title: t('auth.title'),
+  title: computed(() => t('auth.title')),
 });
 </script>

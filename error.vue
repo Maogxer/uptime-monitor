@@ -1,15 +1,12 @@
 <!-- error.vue -->
 <template>
   <div class="bg-gray-50 dark:bg-[#0B0F19] text-gray-800 dark:text-gray-200">
-    <!-- Shared background effect -->
-    <div 
-      class="fixed inset-0 dark:bg-[radial-gradient(circle_at_50%_0%,rgba(67,56,202,0.1)_0%,rgba(67,56,202,0)_35%)] pointer-events-none"
-    ></div>
+    <div class="fixed inset-0 dark:bg-[radial-gradient(circle_at_50%_0%,rgba(67,56,202,0.1)_0%,rgba(67,56,202,0)_35%)] pointer-events-none"></div>
 
-    <!-- THE CORE LAYOUT FIX: A flex container that fills the entire screen -->
+    <!-- THE FINAL LAYOUT FIX: A flex container that fills the entire screen -->
     <div class="flex flex-col min-h-screen">
       
-      <!-- Header: No longer 'fixed'. It's a standard flex item. -->
+      <!-- Header (Manually included for reliability) -->
       <header class="w-full bg-gray-50/90 dark:bg-[#0B0F19]/90 backdrop-blur-sm z-10 shadow-md">
         <div class="max-w-5xl mx-auto px-4 pt-8 pb-4">
           <div class="flex justify-between items-center">
@@ -28,7 +25,7 @@
         </div>
       </header>
 
-      <!-- Main Content Area: It grows to fill the space and centers its children. -->
+      <!-- Main Content Area: Grows to fill space and centers its content -->
       <main class="flex-1 flex items-center justify-center">
         <div class="max-w-md w-full px-6 text-center">
           <template v-if="error">
@@ -43,7 +40,7 @@
         </div>
       </main>
 
-      <!-- Footer: No longer 'fixed'. It's a standard flex item. -->
+      <!-- Footer (Manually included for reliability) -->
       <footer class="w-full max-w-5xl mx-auto px-4 py-8 z-10">
         <AppFooter />
       </footer>
@@ -52,7 +49,6 @@
 </template>
 
 <script setup lang="ts">
-// Script content is unchanged, as the logic was correct.
 import { computed } from 'vue';
 import ThemeSwitcher from '~/components/ThemeSwitcher.vue';
 import LanguageSwitcher from '~/components/LanguageSwitcher.vue';
@@ -91,5 +87,5 @@ const handleError = () => clearError({ redirect: '/' });
 </script>
 
 <style scoped>
-/* Scoped styles are not needed here as they are inside the animation components. */
+/* Scoped styles are not needed here as the animations are self-contained in their components. */
 </style>
