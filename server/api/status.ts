@@ -5,11 +5,11 @@ export default defineCachedEventHandler(async (event) => {
   const config = useRuntimeConfig(event);
   const apiKey = config.uptimeRobotApiKey;
   
-  // NEW: Get query parameters from the request URL
   const query = getQuery(event);
   const monitorId = query.id as string | undefined;
 
   if (!apiKey) {
+    // No console.log needed, just throw the error for the frontend to catch.
     throw createError({ statusCode: 500, statusMessage: 'UptimeRobot API key is not configured.' });
   }
 
@@ -24,11 +24,9 @@ export default defineCachedEventHandler(async (event) => {
     logs_start_date: logsStartDate.toString(),
   });
   
-  // NEW: If a specific ID is provided, add it to the API parameters
   if (monitorId) {
     apiParams.set('monitors', monitorId);
-    // For a single monitor, we can ask for more response time data points
-    apiParams.set('response_times_limit', '168'); // ~24 hours if polled every 15 mins
+    apiParams.set('response_times_limit', '168'); 
   } else {
     apiParams.set('response_times_limit', '30'); 
   }
@@ -39,26 +37,33 @@ export default defineCachedEventHandler(async (event) => {
     const response = await $fetch<UptimeRobotResponse>(apiUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: apiParams.toString(),
+      body: apiParams,
     });
-
+    
+    // If the API call itself succeeds but UptimeRobot reports an error,
+    // throw a descriptive error for the frontend.
     if (response.stat === 'fail') {
-      throw createError({ statusCode: 500, statusMessage: `UptimeRobot API Error: ${response.error?.message || 'Unknown'}` });
+      throw createError({ 
+        statusCode: 502, // Bad Gateway - indicates an error from the upstream server
+        statusMessage: `UptimeRobot API Error: ${response.error?.message || 'Unknown error'}` 
+      });
     }
-    // UptimeRobot always returns an array, even for a single monitor request.
+    
     return response.monitors; 
   } catch (error: any) {
-    throw createError({ statusCode: error.statusCode || 500, statusMessage: `Failed to fetch from UptimeRobot API: ${error.message}` });
+    // If the fetch call itself fails (network error, etc.), re-throw it as a standard Nuxt error.
+    throw createError({ 
+      statusCode: error.statusCode || 500, 
+      statusMessage: `Failed to fetch from UptimeRobot API: ${error.message}` 
+    });
   }
 }, {
-  // NEW: Make the cache key dynamic to avoid conflicts
   name: 'uptimerobot_status_cache',
   group: 'uptimerobot',
   getKey: (event) => {
     const query = getQuery(event);
     const monitorId = query.id as string | undefined;
-    // Cache for 'all' is different from cache for a specific ID
     return monitorId || 'all'; 
   },
-  maxAge: 60,
+  maxAge: 60, // Cache for 60 seconds
 });

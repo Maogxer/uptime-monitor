@@ -1,0 +1,62 @@
+{
+  "pageTitle": "ステータスページ",
+  "backToHome": "ホームページに戻る",
+  "footer": {
+    "poweredBy": "監視サービスはUptimeRobotによって提供されています",
+    "description": "UptimeRobot APIに基づく、シンプルで美しいステータスページです。"
+  },
+  "overallStatus": {
+    "loading": "データを読み込み中...",
+    "allOperational": "すべてのシステムは正常に稼働しています",
+    "partialOutage": "一部のシステムが停止しています"
+  },
+  "status": {
+    "up": "稼働中",
+    "down": "停止中",
+    "paused": "一時停止"
+  },
+  "groups": {
+    "down": "停止中",
+    "up": "稼働中",
+    "paused": "一時停止"
+  },
+  "tooltips": {
+    "sortDesc": "遅延でソート (高い順)",
+    "sortAsc": "遅延でソート (低い順)",
+    "refresh": "今すぐ更新",
+    "language": "言語を切り替える"
+  },
+  "time": {
+    "updated": "更新日時",
+    "nextUpdate": "次の更新"
+  },
+  "details": {
+    "errorTitle": "モニターの詳細を読み込めませんでした",
+    "errorSubtitle": "このモニターは存在しないか、データを取得できませんでした。",
+    "responseTime": "応答時間 (最近)",
+    "eventLog": "イベントログ (過去60日間)",
+    "noEvents": "この期間に記録されたイベントはありません。",
+    "noResponseData": "応答時間データがありません",
+    "noHeatmapData": "稼働率データがありません"
+  },
+  "logs": {
+    "downtime": "サービスが {duration} 停止しました",
+    "recovered": "サービスが復旧しました",
+    "started": "監視が開始されました",
+    "paused": "監視が一時停止されました",
+    "unknown": "不明なイベント (タイプ: {type})"
+  },
+  "stats": {
+    "incidents": "{count} 件のインシデント",
+    "downtime": "{duration} のダウンタイム",
+    "last1Day": "過去24時間",
+    "last7Days": "過去7日間",
+    "last30Days": "過去30日間",
+    "last60Days": "過去60日間"
+  },
+  "heatmap": {
+    "overallUptime": "過去60日間の稼働率",
+    "dailyUptime": "日次稼働率 {uptime}%",
+    "today": "今日"
+  }
+}

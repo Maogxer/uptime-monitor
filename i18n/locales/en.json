@@ -1,0 +1,62 @@
+{
+  "pageTitle": "Status Page",
+  "backToHome": "Back to Home",
+  "footer": {
+    "poweredBy": "Monitoring service provided by UptimeRobot",
+    "description": "A simple and beautiful status page based on the UptimeRobot API."
+  },
+  "overallStatus": {
+    "loading": "Loading data...",
+    "allOperational": "All systems operational",
+    "partialOutage": "Partial system outage"
+  },
+  "status": {
+    "up": "Up",
+    "down": "Down",
+    "paused": "Paused"
+  },
+  "groups": {
+    "down": "Down",
+    "up": "Operational",
+    "paused": "Paused"
+  },
+  "tooltips": {
+    "sortDesc": "Sort by latency (High to Low)",
+    "sortAsc": "Sort by latency (Low to High)",
+    "refresh": "Refresh now",
+    "language": "Switch Language"
+  },
+  "time": {
+    "updated": "Updated at",
+    "nextUpdate": "Next refresh"
+  },
+  "details": {
+    "errorTitle": "Could not load monitor details",
+    "errorSubtitle": "This monitor does not exist or data could not be retrieved.",
+    "responseTime": "Response Time (Recent)",
+    "eventLog": "Event Log (Last 60 days)",
+    "noEvents": "No events recorded in this period.",
+    "noResponseData": "No response time data",
+    "noHeatmapData": "No uptime data available"
+  },
+  "logs": {
+    "downtime": "Service down for {duration}",
+    "recovered": "Service recovered",
+    "started": "Monitor started",
+    "paused": "Monitor paused",
+    "unknown": "Unknown event (Type: {type})"
+  },
+  "stats": {
+    "incidents": "{count} incidents",
+    "downtime": "{duration} downtime",
+    "last1Day": "Last 24 hours",
+    "last7Days": "Last 7 days",
+    "last30Days": "Last 30 days",
+    "last60Days": "Last 60 days"
+  },
+  "heatmap": {
+    "overallUptime": "Last 60d Uptime",
+    "dailyUptime": "Daily Uptime {uptime}%",
+    "today": "Today"
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "pageTitle": "站点监测",
+  "backToHome": "返回主页",
+  "footer": {
+    "poweredBy": "由 UptimeRobot 提供监控服务",
+    "description": "一个基于 UptimeRobot API 的简单、漂亮的站点状态监控页面。"
+  },
+  "overallStatus": {
+    "loading": "数据加载中...",
+    "allOperational": "所有系统运行正常",
+    "partialOutage": "部分站点出现异常"
+  },
+  "status": {
+    "up": "运行中",
+    "down": "宕机",
+    "paused": "已暂停"
+  },
+  "groups": {
+    "down": "出现异常",
+    "up": "运行中",
+    "paused": "已暂停"
+  },
+  "tooltips": {
+    "sortDesc": "按延迟从高到低排序",
+    "sortAsc": "按延迟从低到高排序",
+    "refresh": "立即刷新",
+    "language": "切换语言"
+  },
+  "time": {
+    "updated": "更新于",
+    "nextUpdate": "下次刷新"
+  },
+  "details": {
+    "errorTitle": "无法加载监控项详情",
+    "errorSubtitle": "该监控项不存在或无法从 API 获取数据。",
+    "responseTime": "响应时间 (最近数据)",
+    "eventLog": "事件日志 (近 60 天)",
+    "noEvents": "在此期间没有记录到事件。",
+    "noResponseData": "无响应时间数据",
+    "noHeatmapData": "无可用率数据"
+  },
+  "logs": {
+    "downtime": "服务中断，持续 {duration}",
+    "recovered": "服务已恢复",
+    "started": "监控已启动",
+    "paused": "监控已暂停",
+    "unknown": "未知事件 (类型: {type})"
+  },
+  "stats": {
+    "incidents": "{count} 次中断",
+    "downtime": "{duration} 宕机",
+    "last1Day": "最近 1 天",
+    "last7Days": "最近 7 天",
+    "last30Days": "最近 30 天",
+    "last60Days": "最近 60 天"
+  },
+  "heatmap": {
+    "overallUptime": "近60天可用率",
+    "dailyUptime": "当日可用率 {uptime}%",
+    "today": "今日"
+  }
+}

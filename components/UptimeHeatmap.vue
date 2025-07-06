@@ -2,10 +2,6 @@
 <template>
   <div>
     <div class="grid grid-flow-col auto-cols-fr gap-px w-full">
-      <!--
-        THE FIX: Using translateY for a subtle vertical shift.
-        - translateY(-2px) moves the element up by 2 pixels on hover.
-      -->
       <div
         v-for="day in heatmapData.days"
         :key="day.date"
@@ -24,20 +20,12 @@
   </div>
 </template>
 
-<!-- components/UptimeHeatmap.vue -->
 <script setup lang="ts">
 import { computed } from 'vue';
 import dayjs from 'dayjs';
+import type { Log, Monitor } from '~/types/monitor';
 
-interface Log {
-  type: number;
-  datetime: number;
-  duration: number;
-}
-
-interface Monitor {
-  logs: Log[];
-}
+const { t } = useI18n();
 
 const props = defineProps<{
   monitor: Monitor,
@@ -53,15 +41,13 @@ const heatmapData = computed(() => {
   const today = dayjs().endOf('day');
   const daySeconds = 24 * 60 * 60;
   
-  // Initialize all days in the range
   for (let i = 0; i < props.days; i++) {
     const date = today.subtract(i, 'day').format('YYYY-MM-DD');
     daysMap.set(date, { downtime: 0 });
   }
 
-  // Process logs to calculate downtime for each day
   (props.monitor.logs || []).forEach(log => {
-    if (log.type === 1) { // Downtime events
+    if (log.type === 1) {
       const logDay = dayjs.unix(log.datetime).format('YYYY-MM-DD');
       if (daysMap.has(logDay)) {
         daysMap.get(logDay)!.downtime += log.duration;
@@ -76,19 +62,14 @@ const heatmapData = computed(() => {
       totalUptime += uptime;
       
       let color = 'bg-green-500';
-      if (uptime < 100 && uptime >= 99) {
-        color = 'bg-yellow-400';
-      } else if (uptime < 99) {
-        color = 'bg-red-500';
-      }
+      if (uptime < 100 && uptime >= 99) color = 'bg-yellow-400';
+      else if (uptime < 99) color = 'bg-red-500';
       
       return {
         date,
         uptime,
         color,
-        // --- THIS IS THE CHANGE ---
-        // Changed from toFixed(3) to toFixed(2)
-        tooltip: `当日可用率 ${uptime.toFixed(2)}%`,
+        tooltip: t('heatmap.dailyUptime', { uptime: uptime.toFixed(2) }),
       };
     });
 
