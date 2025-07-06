@@ -1,3 +1,4 @@
+<!-- pages/monitor/[id].vue -->
 <template>
   <div class="bg-gray-50 dark:bg-[#0B0F19] text-gray-800 dark:text-gray-200">
     <div class="fixed inset-0 dark:bg-[radial-gradient(circle_at_50%_0%,rgba(67,56,202,0.1)_0%,rgba(67,56,202,0)_35%)] pointer-events-none"></div>
@@ -15,8 +16,11 @@
 
       <!-- Main Content -->
       <main class="flex-grow w-full max-w-5xl mx-auto px-4 pb-12 z-10">
-        <!-- Loading State -->
-        <div v-if="pending || !monitor" class="space-y-8">
+        
+        <!-- CORRECTED LOGIC START -->
+
+        <!-- Loading State: Only show when fetch is pending -->
+        <div v-if="pending" class="space-y-8">
           <div class="animate-pulse space-y-4">
             <div class="h-10 bg-gray-300 dark:bg-gray-700 rounded w-1/2"></div>
             <div class="h-6 bg-gray-300 dark:bg-gray-700 rounded w-1/4"></div>
@@ -25,13 +29,13 @@
           <div class="h-80 bg-gray-300 dark:bg-gray-700 rounded-lg"></div>
         </div>
 
-        <!-- Error State -->
+        <!-- Error State: Show if fetch is done, but there's an error OR no monitor found -->
         <div v-else-if="error || !monitor" class="text-center py-20">
             <p class="text-xl font-bold text-red-500">无法加载监控项详情</p>
-            <p class="text-sm text-gray-500 mt-2">{{ error?.statusMessage || '该监控项不存在或无法获取数据。' }}</p>
+            <p class="text-sm text-gray-500 mt-2">{{ error?.statusMessage || '该监控项不存在或无法从 API 获取数据。' }}</p>
         </div>
         
-        <!-- Content Loaded -->
+        <!-- Content Loaded: The final "happy path" case -->
         <div v-else class="space-y-12">
           <!-- Monitor Header -->
           <div class="border-b border-gray-200 dark:border-white/10 pb-6">
@@ -77,69 +81,8 @@
             </div>
           </div>
         </div>
+        <!-- CORRECTED LOGIC END -->
       </main>
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { computed, h } from 'vue';
-import dayjs from 'dayjs';
-import type { Monitor } from '~/types/monitor';
-import ResponseChart from '~/components/ResponseChart.client.vue'; // We can reuse the chart component!
-
-// Icons for logs
-const IconDown = h('svg', { xmlns: "http://www.w3.org/2000/svg", width: 24, height: 24, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", 'stroke-width': 2, 'stroke-linecap': "round", 'stroke-linejoin': "round" }, [ h('path', { d: "m6 9 6 6 6-6" }) ]);
-const IconUp = h('svg', { xmlns: "http://www.w3.org/2000/svg", width: 24, height: 24, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", 'stroke-width': 2, 'stroke-linecap': "round", 'stroke-linejoin': "round" }, [ h('path', { d: "m18 15-6-6-6 6" }) ]);
-
-const route = useRoute();
-const monitorId = Number(route.params.id);
-
-// --- DATA FETCHING (CHANGED TO BE SPECIFIC) ---
-const { data: monitorData, pending, error } = useFetch<Monitor[]>(`/api/status?id=${monitorId}`, {
-  lazy: true,
-  key: `monitor-detail-${monitorId}`, // A unique key for each detail page
-  // We expect an array with one monitor, or an empty array if not found
-  transform: (data) => data?.[0] || null,
-});
-
-// The 'monitor' is now the data itself, not a computed property
-const monitor = monitorData;
-
-const statusInfo = computed(() => {
-  if (!monitor.value) return { text: '未知', color: 'bg-gray-100 text-gray-600' };
-  // ... (rest of the computed property is the same)
-});
-
-// Helper functions for logs display
-const getLogIcon = (type: number) => {
-  if (type === 1 || type === 99) { // Down / Started
-    return { bg: 'bg-red-100 dark:bg-red-500/10', text: 'text-red-600 dark:text-red-400', icon: IconDown };
-  }
-  if (type === 2) { // Up
-    return { bg: 'bg-green-100 dark:bg-green-500/10', text: 'text-green-600 dark:text-green-400', icon: IconUp };
-  }
-  return { bg: 'bg-gray-100 dark:bg-gray-500/10', text: 'text-gray-600 dark:text-gray-400', icon: IconUp }; // Paused/default
-};
-
-const formatDuration = (seconds: number) => {
-  if (seconds < 60) return `${seconds} 秒`;
-  if (seconds < 3600) return `${Math.floor(seconds / 60)} 分钟 ${seconds % 60} 秒`;
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  return `${hours} 小时 ${minutes} 分钟`;
-};
-
-const getLogMessage = (log: { type: number, duration: number }) => {
-  if (log.type === 1) return `服务中断，持续 ${formatDuration(log.duration)}`;
-  if (log.type === 2) return '服务已恢复';
-  if (log.type === 99) return `监控已启动`;
-  if (log.type === 98) return `监控已暂停`;
-  return `未知事件 (类型: ${log.type})`;
-};
-
-// Set page title
-useHead({
-  title: computed(() => monitor.value ? `${monitor.value.friendly_name} - 状态详情` : '加载中...'),
-});
-</script>
