@@ -51,6 +51,10 @@
       "title": "ソースコード",
       "desc": "このプロジェクトは完全にオープンソースです。コードを自由に閲覧、使用、または貢献してください。",
       "button": "GitHubで表示"
+    },
+    "credit": {
+      "generatedBy": "このプロジェクトのすべてのコードは、{modelName} の支援を受けて生成されました。",
+      "modelName": "Gemini 2.5 Pro"
     }
   },
   "auth": {

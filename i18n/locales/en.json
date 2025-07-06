@@ -51,6 +51,10 @@
       "title": "Get the Source",
       "desc": "This project is fully open-source. Feel free to view, use, or contribute to the code.",
       "button": "View on GitHub"
+    },
+    "credit": {
+      "generatedBy": "All code for this project was generated with the assistance of {modelName}.",
+      "modelName": "Gemini 2.5 Pro"
     }
   },
   "auth": {

@@ -10,28 +10,14 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     uptimeRobotApiKey: process.env.NUXT_UPTIME_ROBOT_API_KEY,
-    sitePassword: process.env.NUXT_SITE_PASSWORD, // Server-side only
-    
+    sitePassword: process.env.NUXT_SITE_PASSWORD,
     public: {
-    title: 'Status Page',
-    sitePasswordProtect: process.env.NUXT_SITE_PASSWORD_PROTECT, // Expose to client/middleware
-    githubUrl: 'https://github.com/Maogxer/uptime-monitor' // <-- ADD THIS
+      title: 'Status Page',
+      sitePasswordProtect: process.env.NUXT_SITE_PASSWORD_PROTECT,
+      githubUrl: 'https://github.com/Maogxer/uptime-monitor'
     }
   },
 
-  nitro: {
-    hooks: {
-      'compiled': () => {
-        if (!process.env.NUXT_UPTIME_ROBOT_API_KEY) {
-          console.warn('⚠️  UptimeRobot API key is not configured. The application will not be able to fetch monitor statuses.')
-        }
-        if (process.env.NUXT_SITE_PASSWORD_PROTECT === 'true' && !process.env.NUXT_SITE_PASSWORD) {
-          console.warn('🔒 Password protection is enabled, but no site password is set. Users will not be able to log in.')
-        }
-      }
-    }
-  },
-  
   colorMode: {
     classSuffix: '',
     preference: 'system',
@@ -53,6 +39,15 @@ export default defineNuxtConfig({
       cookieKey: 'i18n_redirected',
       redirectOn: 'root',
     },
-    vueI18n: './i18n.config.ts'
+    // FIX 2.1: Explicitly disable the deprecated directive
+    bundle: {
+      optimizeTranslationDirective: false,
+    },
+    // FIX 2.2: The vueI18n property has been removed
+  },
+
+  // FIX 1: Add the compatibility date for Nitro
+  nitro: {
+    compatibilityDate: '2024-04-03' // Using the fallback date is safest
   },
 })

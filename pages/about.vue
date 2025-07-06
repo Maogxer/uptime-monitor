@@ -11,7 +11,6 @@
     <section>
       <h2 class="text-3xl font-bold text-center mb-8">{{ t('about.features.title') }}</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- Feature Cards -->
         <div v-for="item in features" :key="item.title" class="p-6 rounded-2xl border bg-white/50 dark:bg-white/5 backdrop-blur-xl border-gray-200/80 dark:border-white/10 shadow-lg">
           <div class="flex items-center gap-4">
             <span class="p-2 rounded-lg bg-indigo-100 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
@@ -28,7 +27,6 @@
     <section>
       <h2 class="text-3xl font-bold text-center mb-8">{{ t('about.stack.title') }}</h2>
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-items-center">
-        <!-- Tech Logos -->
         <a v-for="tech in techStack" :key="tech.name" :href="tech.url" target="_blank" rel="noopener noreferrer" :title="tech.name" class="grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition duration-300">
           <component :is="tech.icon" class="h-12 w-12" />
         </a>
@@ -43,6 +41,19 @@
         {{ t('about.source.button') }}
       </a>
     </section>
+
+    <!-- THE FINAL SIGNATURE -->
+    <section class="text-center pt-8 border-t border-gray-200 dark:border-white/10">
+      <div class="inline-block p-2 rounded-full bg-indigo-100 dark:bg-indigo-500/10 text-indigo-500 dark:text-indigo-400 mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3L6 7l4 4M14 21l4-4-4-4"/><path d="m18 6-4 4-4-4"/><path d="m6 18 4-4 4 4"/></svg>
+      </div>
+      <i18n-t keypath="about.credit.generatedBy" tag="p" class="text-sm text-gray-500 dark:text-gray-400">
+        <template #modelName>
+          <span class="font-semibold text-gray-700 dark:text-gray-200">{{ t('about.credit.modelName') }}</span>
+        </template>
+      </i18n-t>
+    </section>
+
   </div>
 </template>
 
@@ -56,7 +67,6 @@ useHead({
   title: t('about.title')
 });
 
-// Helper to create simple path-based SVG components
 const icon = (path: string) => h('svg', { xmlns: 'http://www.w3.org/2000/svg', width: 24, height: 24, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', 'stroke-width': 2, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, [h('path', { d: path })]);
 
 const features = computed(() => [

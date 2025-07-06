@@ -51,6 +51,10 @@
       "title": "获取源码",
       "desc": "本项目完全开源，您可以自由地查看、使用或贡献代码。",
       "button": "查看 GitHub 仓库"
+    },
+    "credit": {
+      "generatedBy": "本项目所有代码由 {modelName} 协助生成。",
+      "modelName": "Gemini 2.5 Pro"
     }
   },
   "auth": {
