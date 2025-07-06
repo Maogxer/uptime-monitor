@@ -1,13 +1,20 @@
 // server/api/status.ts
+import type { Monitor } from '~/types/monitor'; // 建议为类型创建一个单独的文件
 
-// Helper function to get start and end dates for the logs
-function getStartAndEndDates(days: number): string {
-  const endDate = Math.floor(Date.now() / 1000);
-  const startDate = endDate - (days * 24 * 60 * 60);
-  return `${startDate}_${endDate}`;
+// 定义从 UptimeRobot API 返回的期望类型
+interface UptimeRobotError {
+  type: string;
+  message: string;
 }
 
-export default defineEventHandler(async (event) => {
+interface UptimeRobotResponse {
+  stat: 'ok' | 'fail';
+  monitors: Monitor[];
+  error?: UptimeRobotError;
+}
+
+// 使用 defineCachedEventHandler 增加缓存
+export default defineCachedEventHandler(async (event) => {
   const config = useRuntimeConfig(event);
   const apiKey = config.uptimeRobotApiKey;
 
@@ -15,24 +22,25 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 500, statusMessage: 'UptimeRobot API key is not configured.' });
   }
 
-  // We need logs for the last 60 days to build the heatmap
+  // 计算60天前的Unix时间戳
+  const logsStartDate = Math.floor(Date.now() / 1000) - (60 * 24 * 60 * 60);
+
   const apiParams = new URLSearchParams({
     api_key: apiKey,
     format: 'json',
     response_times: '1',
-    response_times_limit: '30',
-    logs: '1', // <-- Request logs
-    logs_limit: '50', // Max 50 log entries per monitor
-    logs_start_date: getStartAndEndDates(60).split('_')[0], // <-- Start date 60 days ago
-    logs_end_date: getStartAndEndDates(60).split('_')[1],   // <-- End date is today
+    response_times_limit: '30', // 最近30个响应时间点
+    logs: '1',
+    logs_limit: '50', // 最近50条日志
+    logs_start_date: logsStartDate.toString(),
   });
 
   const apiUrl = 'https://api.uptimerobot.com/v2/getMonitors';
 
   try {
-    const response = await $fetch<any>(apiUrl, {
+    const response = await $fetch<UptimeRobotResponse>(apiUrl, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Cache-Control': 'no-cache' },
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: apiParams.toString(),
     });
 
@@ -43,4 +51,17 @@ export default defineEventHandler(async (event) => {
   } catch (error: any) {
     throw createError({ statusCode: error.statusCode || 500, statusMessage: `Failed to fetch from UptimeRobot API: ${error.message}` });
   }
+}, {
+  // 缓存配置
+  name: 'uptimerobot_status_cache',
+  maxAge: 60, // 缓存60秒
+  // swr: true, // 可选：后台异步更新缓存
 });
+
+// 可选：在项目根目录创建 types/monitor.ts 来存放共享类型
+/*
+// types/monitor.ts
+export interface Log { type: number; datetime: number; duration: number; }
+export interface ResponseTime { datetime: number; value: number; }
+export interface Monitor { id: number; friendly_name: string; status: number; logs: Log[]; response_times: ResponseTime[]; url: string; }
+*/
