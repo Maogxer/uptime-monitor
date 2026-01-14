@@ -36,8 +36,11 @@ export default defineCachedEventHandler(async (event) => {
   try {
     const response = await $fetch<UptimeRobotResponse>(apiUrl, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: apiParams,
+      // --- 修改点 2: 移除手动 Content-Type，让 $fetch 自动处理为 application/json ---
+      // --- 或者显式指定为 application/json ---
+      headers: { 'Content-Type': 'application/json' },
+      // --- 修改点 3: 直接传递对象，不要使用 URLSearchParams ---
+      body: apiBody,
     });
     
     // If the API call itself succeeds but UptimeRobot reports an error,
