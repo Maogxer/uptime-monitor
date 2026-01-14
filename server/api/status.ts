@@ -40,7 +40,7 @@ export default defineCachedEventHandler(async (event) => {
       // --- 或者显式指定为 application/json ---
       headers: { 'Content-Type': 'application/json' },
       // --- 修改点 3: 直接传递对象，不要使用 URLSearchParams ---
-      body: apiBody,
+      body: apiParams,
     });
     
     // If the API call itself succeeds but UptimeRobot reports an error,
