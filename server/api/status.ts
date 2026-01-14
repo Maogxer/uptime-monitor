@@ -31,7 +31,7 @@ export default defineCachedEventHandler(async (event) => {
     apiParams.set('response_times_limit', '30'); 
   }
 
-  const apiUrl = 'https://api.uptimerobot.com/v3/monitors';
+  const apiUrl = 'https://api.uptimerobot.com/v3/getMonitors';
 
   try {
     const response = await $fetch<UptimeRobotResponse>(apiUrl, {
